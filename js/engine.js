@@ -45,6 +45,9 @@ var Engine = (function(global) {
         /* Call our update/render functions, pass along the time delta to
          * our update function since it may be used for smooth animation.
          */
+          if(player.lives < 0){
+            dt = 0;
+         }
         update(dt);
         render();
 
@@ -56,7 +59,10 @@ var Engine = (function(global) {
         /* Use the browser's requestAnimationFrame function to call this
          * function again as soon as the browser is able to draw another frame.
          */
-        win.requestAnimationFrame(main);
+
+
+
+        win.requestAnimationFrame(main);            
     };
 
     /* This function does some initial setup that should only occur once,
@@ -80,7 +86,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
     }
 
     /* This is called by the update function  and loops through all of the
@@ -94,7 +100,27 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        player.update();
+        player.update(dt);
+    }
+
+    function checkCollisions(){
+        var width = 101;
+        var height = 83;
+        
+        player.isColliding = false;
+
+        allEnemies.forEach(function(enemy) {
+            if(player.x < enemy.x+width && 
+                player.x+width > enemy.x &&
+                player.y < enemy.y+height &&
+                player.y+height > enemy.y)
+            {
+                    player.isColliding = true;
+                    //player.die();
+                    console.log("player hit thing");
+                    return;
+            }
+        });
     }
 
     /* This function initially draws the "game level", it will then call
@@ -107,17 +133,31 @@ var Engine = (function(global) {
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
          */
+        renderTerrain();
+        renderEntities();
+        renderGui();
+
+        if(player.lives < 0){
+            displayGameover();
+        }
+    }
+
+    /* This function is called by the render function and is called on each game
+     * tick. It's purpose is to then call the render functions you have defined
+     * on your enemy and player entities within app.js
+     */
+     function renderTerrain() {
         var rowImages = [
-                'images/water-block.png',   // Top row is water
-                'images/stone-block.png',   // Row 1 of 3 of stone
-                'images/stone-block.png',   // Row 2 of 3 of stone
-                'images/stone-block.png',   // Row 3 of 3 of stone
-                'images/grass-block.png',   // Row 1 of 2 of grass
-                'images/grass-block.png'    // Row 2 of 2 of grass
-            ],
-            numRows = 6,
-            numCols = 5,
-            row, col;
+            'images/water-block.png',   // Top row is water
+            'images/stone-block.png',   // Row 1 of 3 of stone
+            'images/stone-block.png',   // Row 2 of 3 of stone
+            'images/stone-block.png',   // Row 3 of 3 of stone
+            'images/grass-block.png',   // Row 1 of 2 of grass
+            'images/grass-block.png'    // Row 2 of 2 of grass
+        ],
+        numRows = 6,
+        numCols = 5,
+        row, col;
 
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
@@ -135,15 +175,8 @@ var Engine = (function(global) {
                 ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
             }
         }
+     }
 
-
-        renderEntities();
-    }
-
-    /* This function is called by the render function and is called on each game
-     * tick. It's purpose is to then call the render functions you have defined
-     * on your enemy and player entities within app.js
-     */
     function renderEntities() {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
@@ -153,6 +186,31 @@ var Engine = (function(global) {
         });
 
         player.render();
+    }
+
+    function renderGui(){
+        hearts.forEach(function(element) {
+            element.render();
+        });
+
+        gem.render();
+        ctx.font = "35pt Verdana";
+        ctx.fillStyle = "white";
+        ctx.strokeStyle = "black";
+        ctx.fillText(player.score, 438, 530);
+        ctx.strokeText(player.score, 438, 530);
+        
+    }
+
+    function displayGameover(){
+        ctx.font = "60pt Verdana";
+        ctx.fillStyle = "red";
+        ctx.strokestyle="black";
+    //     ctx.fillText("Game Over!", ctx.width/2, ctx.height/2);
+    //     ctx.strokeText("Game Over!", ctx.width/2, ctx.height/2); 
+        ctx.fillText("Game Over!", 50, 250);
+        ctx.strokeText("Game Over!", 50, 250); 
+    
     }
 
     /* This function does nothing but it could have been a good place to
@@ -172,7 +230,9 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/heart.png',
+        'images/Gem_Blue.png'
     ]);
     Resources.onReady(init);
 
