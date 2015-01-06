@@ -25,13 +25,17 @@ var Engine = (function(global) {
         ctx = canvas.getContext('2d'),
         lastTime;
 
-    canvas.width = 505;
-    canvas.height = 606;
+    canvas.width = room.map[0].length*128;
+    canvas.height = room.map.length*128;
+    canvas.currRoom = room;
+    // canvas.width = 505;
+    // canvas.height = 606;
     doc.body.appendChild(canvas);
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
      */
+
     function main() {
         /* Get our time delta information which is required if your game
          * requires smooth animation. Because everyone's computer processes
@@ -86,7 +90,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        checkCollisions();
+        //checkCollisions();
     }
 
     /* This is called by the update function  and loops through all of the
@@ -97,12 +101,12 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
-        allEnemies.forEach(function(enemy) {
-            enemy.update(dt);
-        });
+        // allEnemies.forEach(function(enemy) {
+        //     enemy.update(dt);
+        // });
         player.update(dt);
     }
-
+/*
     function checkCollisions(){
         var width = 101;
         var height = 83;
@@ -122,6 +126,7 @@ var Engine = (function(global) {
             }
         });
     }
+*/
 
     /* This function initially draws the "game level", it will then call
      * the renderEntities function. Remember, this function is called every
@@ -133,9 +138,9 @@ var Engine = (function(global) {
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
          */
-        renderTerrain();
+        renderTerrain(canvas.currRoom);
         renderEntities();
-        renderGui();
+        //renderGui();
 
         if(player.lives < 0){
             displayGameover();
@@ -146,7 +151,8 @@ var Engine = (function(global) {
      * tick. It's purpose is to then call the render functions you have defined
      * on your enemy and player entities within app.js
      */
-     function renderTerrain() {
+     function renderTerrain(currentRoom) {
+        /*
         var rowImages = [
             'images/water-block.png',   // Top row is water
             'images/stone-block.png',   // Row 1 of 3 of stone
@@ -155,16 +161,13 @@ var Engine = (function(global) {
             'images/grass-block.png',   // Row 1 of 2 of grass
             'images/grass-block.png'    // Row 2 of 2 of grass
         ],
-        numRows = 6,
-        numCols = 5,
-        row, col;
-
+        */
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
          * portion of the "grid"
          */
-        for (row = 0; row < numRows; row++) {
-            for (col = 0; col < numCols; col++) {
+        for (row = 0; row < currentRoom.map[0].length; row++) {
+            for (col = 0; col < currentRoom.map.length; col++) {
                 /* The drawImage function of the canvas' context element
                  * requires 3 parameters: the image to draw, the x coordinate
                  * to start drawing and the y coordinate to start drawing.
@@ -172,7 +175,11 @@ var Engine = (function(global) {
                  * so that we get the benefits of caching these images, since
                  * we're using them over and over.
                  */
-                ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
+                //ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
+                var tile = currentRoom.getTile(row,col);
+                //console.log("tile: " + tile);
+                ctx.drawImage(Resources.get('assets/tiles/'+tile), row * 128, col * 128);
+                //ctx.drawImage(Resources.get('assets/tiles/dungeontile2d.png'), row * 128, col * 128);
             }
         }
      }
@@ -181,10 +188,11 @@ var Engine = (function(global) {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
+         /*
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
-
+        */
         player.render();
     }
 
@@ -213,6 +221,15 @@ var Engine = (function(global) {
     
     }
 
+    ctx.setRoom = function(newRoom){
+        ctx.clearRect(0, 0,ctx.canvas.width, ctx.canvas.height);
+        canvas.currRoom = newRoom;
+    }
+
+    ctx.getRoom = function(){
+        return canvas.currRoom;
+    }
+
     /* This function does nothing but it could have been a good place to
      * handle game reset states - maybe a new game menu or a game over screen
      * those sorts of things. It's only called once by the init() method.
@@ -232,7 +249,26 @@ var Engine = (function(global) {
         'images/enemy-bug.png',
         'images/char-boy.png',
         'images/heart.png',
-        'images/Gem_Blue.png'
+        'images/Gem_Blue.png',
+        'assets/tiles/dungeontile1.png',
+        'assets/tiles/dungeontile2.png',
+        'assets/tiles/dungeontile2b.png',
+        'assets/tiles/dungeontile2c.png',
+        'assets/tiles/dungeontile2d.png',
+        'assets/tiles/dungeontile2e.png',
+        'assets/tiles/dungeontile1b.png',
+        'assets/guy.png',
+        'assets/tiles/walltile1.png',
+        'assets/tiles/walltile1a.png',
+        'assets/tiles/walltile1_E.png',
+        'assets/tiles/walltile1_W.png',
+        'assets/tiles/walltile1_N.png',
+        'assets/tiles/walltile1_S.png',
+        'assets/tiles/wallcornerNE.png',
+        'assets/tiles/wallcornerNW.png',
+        'assets/tiles/wallcornerSE.png',
+        'assets/tiles/wallcornerSW.png',
+        'assets/tiles/walldoor1_N.png'
     ]);
     Resources.onReady(init);
 
