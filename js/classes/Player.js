@@ -25,7 +25,7 @@ var playerChecks = function() {
 }
 
 var Player = function() {
-    this.sprite = 'assets/guy.png';
+    this.sprite = 'assets/guy4.png';
 
     this.x = 100;
     this.y = (83*4)+50;
@@ -35,11 +35,11 @@ var Player = function() {
     this.dy = 0;
     this.dx = 0;
 
-    this.acc = 5;
+    this.acc = 1;
     this.velX = 0;
     this.velY = 0;
 
-    this.maxVel = 10;
+    this.maxVel = 5;
 
     this.isColliding = false;
     this.lives = 3;
