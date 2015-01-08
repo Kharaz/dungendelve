@@ -85,13 +85,13 @@ Player.prototype.update = function(dt) {
     if(this.velY > 0) { ySign = 1;} else {ySign = -1;}
 
     if(this.dx == 0){
-        this.velX -= (this.acc/2) * xSign;
+        this.velX -= (this.acc) * xSign;
     } else {
         this.velX += this.acc * this.dx;    
     }
 
     if(this.dy == 0){
-        this.velY -= (this.acc/2) * ySign;
+        this.velY -= (this.acc) * ySign;
     } else {
         this.velY += this.acc * this.dy;
     }
