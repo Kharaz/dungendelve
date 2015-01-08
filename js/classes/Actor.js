@@ -1,7 +1,7 @@
 var Actor = function(sprite, x, y){
     this.x = x;
     this.y = y;
-    this.sprite = sprite;
+    //this.sprite = sprite;
 }
 
 Actor.prototype.update = function(dt){
