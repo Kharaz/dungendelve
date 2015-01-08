@@ -1,6 +1,6 @@
-var plusorminus = function(num){
-    return Math.floor(((Math.random()*num) - (.5 * num)));
-}
+var plusorminus = function(num) {
+    return Math.floor(((Math.random() * num) - (0.5 * num)));
+};
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
@@ -28,11 +28,11 @@ var gem = new GuiElement(gemsprite, 400, 400);
 
 var player = new Player();
 var room = new Room();
-room.init(7,5);
-room.doors.push(new Door(3,0));
+room.init(7, 5);
+room.doors.push(new Door(3, 0));
 
 var room2 = new Room();
-room2.init(5,4);
+room2.init(5, 4);
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keydown', function(e) {
@@ -42,8 +42,8 @@ document.addEventListener('keydown', function(e) {
         39: 'right',
         40: 'down'
     };
-    if(player.lives >= 0){
-        player.handleInput(allowedKeys[e.keyCode]);    
+    if (player.lives >= 0) {
+        player.handleInput(allowedKeys[e.keyCode]);
     }
 });
 
@@ -54,7 +54,7 @@ document.addEventListener('keyup', function(e) {
         39: 'right',
         40: 'down'
     };
-    if(player.lives >= 0){
-        player.handleInputUp(allowedKeys[e.keyCode]);    
+    if (player.lives >= 0) {
+        player.handleInputUp(allowedKeys[e.keyCode]);
     }
 });

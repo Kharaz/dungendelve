@@ -25,8 +25,8 @@ var Engine = (function(global) {
         ctx = canvas.getContext('2d'),
         lastTime;
 
-    canvas.width = room.map[0].length*128;
-    canvas.height = room.map.length*128;
+    canvas.width = room.map[0].length * 128;
+    canvas.height = room.map.length * 128;
     canvas.currRoom = room;
     // canvas.width = 505;
     // canvas.height = 606;
@@ -49,9 +49,9 @@ var Engine = (function(global) {
         /* Call our update/render functions, pass along the time delta to
          * our update function since it may be used for smooth animation.
          */
-          if(player.lives < 0){
+        if (player.lives < 0) {
             dt = 0;
-         }
+        }
         update(dt);
         render();
 
@@ -66,8 +66,8 @@ var Engine = (function(global) {
 
 
 
-        win.requestAnimationFrame(main);            
-    };
+        win.requestAnimationFrame(main);
+    }
 
     /* This function does some initial setup that should only occur once,
      * particularly setting the lastTime variable that is required for the
@@ -101,32 +101,32 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
-        // allEnemies.forEach(function(enemy) {
-        //     enemy.update(dt);
-        // });
-        player.update(dt);
-    }
-/*
-    function checkCollisions(){
-        var width = 101;
-        var height = 83;
-        
-        player.isColliding = false;
+            // allEnemies.forEach(function(enemy) {
+            //     enemy.update(dt);
+            // });
+            player.update(dt);
+        }
+        /*
+            function checkCollisions(){
+                var width = 101;
+                var height = 83;
+                
+                player.isColliding = false;
 
-        allEnemies.forEach(function(enemy) {
-            if(player.x < enemy.x+width && 
-                player.x+width > enemy.x &&
-                player.y < enemy.y+height &&
-                player.y+height > enemy.y)
-            {
-                    player.isColliding = true;
-                    //player.die();
-                    console.log("player hit thing");
-                    return;
+                allEnemies.forEach(function(enemy) {
+                    if(player.x < enemy.x+width && 
+                        player.x+width > enemy.x &&
+                        player.y < enemy.y+height &&
+                        player.y+height > enemy.y)
+                    {
+                            player.isColliding = true;
+                            //player.die();
+                            console.log("player hit thing");
+                            return;
+                    }
+                });
             }
-        });
-    }
-*/
+        */
 
     /* This function initially draws the "game level", it will then call
      * the renderEntities function. Remember, this function is called every
@@ -142,7 +142,7 @@ var Engine = (function(global) {
         renderEntities();
         //renderGui();
 
-        if(player.lives < 0){
+        if (player.lives < 0) {
             displayGameover();
         }
     }
@@ -151,7 +151,7 @@ var Engine = (function(global) {
      * tick. It's purpose is to then call the render functions you have defined
      * on your enemy and player entities within app.js
      */
-     function renderTerrain(currentRoom) {
+    function renderTerrain(currentRoom) {
         /*
         var rowImages = [
             'images/water-block.png',   // Top row is water
@@ -176,19 +176,19 @@ var Engine = (function(global) {
                  * we're using them over and over.
                  */
                 //ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
-                var tile = currentRoom.getTile(row,col);
+                var tile = currentRoom.getTile(row, col);
                 //console.log("tile: " + tile);
-                ctx.drawImage(Resources.get('assets/tiles/'+tile), row * 128, col * 128);
+                ctx.drawImage(Resources.get('assets/tiles/' + tile), row * 128, col * 128);
                 //ctx.drawImage(Resources.get('assets/tiles/dungeontile2d.png'), row * 128, col * 128);
             }
         }
-     }
+    }
 
     function renderEntities() {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
-         /*
+        /*
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
@@ -196,7 +196,7 @@ var Engine = (function(global) {
         player.render();
     }
 
-    function renderGui(){
+    function renderGui() {
         hearts.forEach(function(element) {
             element.render();
         });
@@ -207,28 +207,28 @@ var Engine = (function(global) {
         ctx.strokeStyle = "black";
         ctx.fillText(player.score, 438, 530);
         ctx.strokeText(player.score, 438, 530);
-        
+
     }
 
-    function displayGameover(){
+    function displayGameover() {
         ctx.font = "60pt Verdana";
         ctx.fillStyle = "red";
-        ctx.strokestyle="black";
-    //     ctx.fillText("Game Over!", ctx.width/2, ctx.height/2);
-    //     ctx.strokeText("Game Over!", ctx.width/2, ctx.height/2); 
+        ctx.strokestyle = "black";
+        //     ctx.fillText("Game Over!", ctx.width/2, ctx.height/2);
+        //     ctx.strokeText("Game Over!", ctx.width/2, ctx.height/2); 
         ctx.fillText("Game Over!", 50, 250);
-        ctx.strokeText("Game Over!", 50, 250); 
-    
+        ctx.strokeText("Game Over!", 50, 250);
+
     }
 
-    ctx.setRoom = function(newRoom){
-        ctx.clearRect(0, 0,ctx.canvas.width, ctx.canvas.height);
+    ctx.setRoom = function(newRoom) {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         canvas.currRoom = newRoom;
-    }
+    };
 
-    ctx.getRoom = function(){
+    ctx.getRoom = function() {
         return canvas.currRoom;
-    }
+    };
 
     /* This function does nothing but it could have been a good place to
      * handle game reset states - maybe a new game menu or a game over screen
