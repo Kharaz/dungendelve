@@ -24,6 +24,17 @@
 //     }
 // }
 
+function sign(x) {
+    return typeof x === 'number' ? x ? x < 0 ? -1 : 1 : x === x ? 0 : NaN : NaN;
+}
+
+directions = {
+    "up": -1,
+    "down": 1,
+    "right": 1,
+    "left": -1
+};
+
 var Player = function() {
     this.img = 'assets/guy4.png';
     Actor.call(this, 200, 200);
@@ -81,19 +92,9 @@ Player.prototype.update = function(dt) {
         this.die();
     }
 
-    var xSign;
-    var ySign;
-
-    if (this.velX > 0) {
-        xSign = 1;
-    } else {
-        xSign = -1;
-    }
-    if (this.velY > 0) {
-        ySign = 1;
-    } else {
-        ySign = -1;
-    }
+    // increase velocity by acceleration
+    var xSign = sign(this.velX);
+    var ySign = sign(this.velY);
 
     if(this.dx == 0){
         this.velX -= (this.acc) * xSign;
@@ -107,7 +108,7 @@ Player.prototype.update = function(dt) {
         this.velY += this.acc * this.dy;
     }
 
-    //capping velocity at max
+    // cap velocity at max
     if (Math.abs(this.velY) >= this.maxVel) {
         this.velY = this.maxVel * this.dy;
     }
@@ -115,6 +116,7 @@ Player.prototype.update = function(dt) {
         this.velX = this.maxVel * this.dx;
     }
 
+    // change position
     this.x += parseInt(this.velX * dt);
     this.y += parseInt(this.velY * dt);
 
@@ -151,27 +153,22 @@ Player.prototype.addscore = function() {
 
 
 Player.prototype.handleInput = function(key) {
-    if (key == "left") {
-        this.dx = -1;
-    }
-    if (key == "up") {
-        this.dy = -1;
-    }
-    if (key == "down") {
-        this.dy = 1;
-    }
-    if (key == "right") {
-        this.dx = 1;
+    if ((key == "left") || (key == "right")) {
+        this.dx = directions[key];
+    } else if ((key == "up") || (key == "down")) {
+        this.dy = directions[key];
     }
 };
 Player.prototype.handleInputUp = function(key) {
-
     if ((key == "left") || (key == "right")) {
-        this.dx = 0;
-        this.velX = 0;
-    }
-    if ((key == "up") || (key == "down")) {
-        this.dy = 0;
-        this.velY = 0;
+        if (this.dx === directions[key]) {
+            this.dx = 0;
+            this.velX = 0;
+        }
+    } else if ((key == "up") || (key == "down")) {
+        if (this.dy === directions[key]) {
+            this.dy = 0;
+            this.velY = 0;
+        }
     }
 };
