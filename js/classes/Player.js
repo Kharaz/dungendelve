@@ -2,30 +2,9 @@
 // This class requires an update(), render() and
 // a handleInput() method.
 
-
-// var playerChecks = function() {
-//     var xOffset = 30;
-//     var yOffset = 10;
-
-//     var maxX = ctx.canvas.currRoom.map[0].length *128;
-//     var maxY = ctx.canvas.currRoom.map.length * 128;
-
-//     if(player.x < 0+128-xOffset){
-//         player.x = 0+128-xOffset;
-//     }
-//     if(player.x > maxX-120-128+xOffset){
-//         player.x = maxX-120-128+xOffset;
-//     }
-//     if(player.y < yOffset){
-//         player.y = yOffset;
-//     }
-//     if(player.y > maxY-128-64-128 + yOffset){
-//         player.y = maxY-128-64-128 + yOffset;
-//     }
-// }
-
 var Player = function() {
     this.img = 'assets/guy4.png';
+    this.name = "player";
     Actor.call(this, 200, 200);
     var animCells = [{
         x: 0,
@@ -41,15 +20,16 @@ var Player = function() {
     this.dy = 0;
     this.dx = 0;
 
-    this.acc = 40;
+    this.acc = 30;
     this.velX = 0;
     this.velY = 0;
 
     this.maxVel = 300;
 
-    this.isColliding = false;
     this.lives = 3;
     this.score = 0;
+
+    //this.collider = new Collider(this);
 };
 
 Player.prototype = Object.create(Actor.prototype);
@@ -175,3 +155,7 @@ Player.prototype.handleInputUp = function(key) {
         this.velY = 0;
     }
 };
+
+Player.prototype.collideAction = function(){
+    return;
+}

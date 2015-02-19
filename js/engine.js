@@ -28,9 +28,10 @@ var Engine = (function(global) {
     canvas.width = room.map[0].length * 128;
     canvas.height = room.map.length * 128;
     canvas.currRoom = room;
-    // canvas.width = 505;
-    // canvas.height = 606;
+    
     doc.body.appendChild(canvas);
+
+    this.objects = [];
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
@@ -76,6 +77,7 @@ var Engine = (function(global) {
     function init() {
         reset();
         lastTime = Date.now();
+
         main();
     }
 
@@ -128,6 +130,17 @@ var Engine = (function(global) {
             }
         */
 
+    function checkCollisions()
+    { 
+        for(var i = 0; i < objects.length; i++){
+            for(var j = 0; j < objects.length; j++){
+                if(i != j){
+                    objects[i].isColliding(objects[j]);
+                }
+            }
+        }
+    }
+
     /* This function initially draws the "game level", it will then call
      * the renderEntities function. Remember, this function is called every
      * game tick (or loop of the game engine) because that's how games work -
@@ -152,34 +165,14 @@ var Engine = (function(global) {
      * on your enemy and player entities within app.js
      */
     function renderTerrain(currentRoom) {
-        /*
-        var rowImages = [
-            'images/water-block.png',   // Top row is water
-            'images/stone-block.png',   // Row 1 of 3 of stone
-            'images/stone-block.png',   // Row 2 of 3 of stone
-            'images/stone-block.png',   // Row 3 of 3 of stone
-            'images/grass-block.png',   // Row 1 of 2 of grass
-            'images/grass-block.png'    // Row 2 of 2 of grass
-        ],
-        */
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
          * portion of the "grid"
          */
         for (row = 0; row < currentRoom.map[0].length; row++) {
             for (col = 0; col < currentRoom.map.length; col++) {
-                /* The drawImage function of the canvas' context element
-                 * requires 3 parameters: the image to draw, the x coordinate
-                 * to start drawing and the y coordinate to start drawing.
-                 * We're using our Resources helpers to refer to our images
-                 * so that we get the benefits of caching these images, since
-                 * we're using them over and over.
-                 */
-                //ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
                 var tile = currentRoom.getTile(row, col);
-                //console.log("tile: " + tile);
                 ctx.drawImage(Resources.get('assets/tiles/' + tile), row * 128, col * 128);
-                //ctx.drawImage(Resources.get('assets/tiles/dungeontile2d.png'), row * 128, col * 128);
             }
         }
     }
@@ -272,7 +265,10 @@ var Engine = (function(global) {
         'assets/tiles/wallcornerNW.png',
         'assets/tiles/wallcornerSE.png',
         'assets/tiles/wallcornerSW.png',
-        'assets/tiles/walldoor1_N.png'
+        'assets/tiles/walldoor1_N.png',
+        'assets/tiles/walldoor1_S.png',
+        'assets/tiles/walldoor1_E.png',
+        'assets/tiles/walldoor1_W.png'
     ]);
     Resources.onReady(init);
 

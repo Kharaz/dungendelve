@@ -5,8 +5,9 @@ var Sprite = function(spritesheet, painter, behaviors) {
     this.x = 200;
     this.y = 200;
     this.spritesheet = spritesheet;
-    //this.width = 128;
-    //this.height = 128;
+    this.w = 128;
+    this.h = 128;
+    this.radius = 64;
 
     this.visible = true;
     this.behaviors = behaviors || [];

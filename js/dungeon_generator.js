@@ -80,14 +80,42 @@ Room.prototype.getTile = function(row, col) {
 
     for (var i = 0; i < this.doors.length; i++) {
         if (this.doors[i].x == row && this.doors[i].y == col) {
-            return "walldoor1_N.png";
+            var dir;
+            if(this.doors[i].x == this.map[0].length-1) {dir = "E";} else if(this.doors[i].x == 0) {dir="W";}
+            if(this.doors[i].y == this.map.length-1) {dir = "S";} else if(this.doors[i].y == 0) {dir="N";}
+            
+            if(dir !== undefined){
+                return "walldoor1_" + dir + ".png";
+            } else {
+                return "walldoor1_N";
+            }
         }
     }
 
     return outTile;
 };
 
-var Door = function(x, y) {
+var Door = function(x, y, target) {
+    this.name = "door";
     this.x = x;
     this.y = y;
+    this.w = 128;
+    this.h = 128;
+
+    //this.target = target || null;
+    this.target = room2;
+    //this.collider = new Collider(this);
+    //ctx.objects.push(this);
 };
+
+Door.prototype = {
+    changeRoom: function(newRoom){
+        ctx.setRoom(newRoom);
+        player.x = newRoom.doors[0].x;
+        player.y = newRoom.doors[0].y;
+    },
+
+    collideAction: function() {
+        this.changeRoom(this.target);
+    }
+}
