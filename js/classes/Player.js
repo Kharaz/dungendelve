@@ -2,9 +2,6 @@
 // This class requires an update(), render() and
 // a handleInput() method.
 
-<<<<<<< HEAD
-=======
-
 // var playerChecks = function() {
 //     var xOffset = 30;
 //     var yOffset = 10;
