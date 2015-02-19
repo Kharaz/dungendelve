@@ -2,6 +2,41 @@
 // This class requires an update(), render() and
 // a handleInput() method.
 
+<<<<<<< HEAD
+=======
+
+// var playerChecks = function() {
+//     var xOffset = 30;
+//     var yOffset = 10;
+
+//     var maxX = ctx.canvas.currRoom.map[0].length *128;
+//     var maxY = ctx.canvas.currRoom.map.length * 128;
+
+//     if(player.x < 0+128-xOffset){
+//         player.x = 0+128-xOffset;
+//     }
+//     if(player.x > maxX-120-128+xOffset){
+//         player.x = maxX-120-128+xOffset;
+//     }
+//     if(player.y < yOffset){
+//         player.y = yOffset;
+//     }
+//     if(player.y > maxY-128-64-128 + yOffset){
+//         player.y = maxY-128-64-128 + yOffset;
+//     }
+// }
+
+function sign(x) {
+    return typeof x === 'number' ? x ? x < 0 ? -1 : 1 : x === x ? 0 : NaN : NaN;
+}
+
+directions = {
+    "up": -1,
+    "down": 1,
+    "right": 1,
+    "left": -1
+};
+
 var Player = function() {
     this.img = 'assets/guy4.png';
     this.name = "player";
@@ -61,19 +96,9 @@ Player.prototype.update = function(dt) {
         this.die();
     }
 
-    var xSign;
-    var ySign;
-
-    if (this.velX > 0) {
-        xSign = 1;
-    } else {
-        xSign = -1;
-    }
-    if (this.velY > 0) {
-        ySign = 1;
-    } else {
-        ySign = -1;
-    }
+    // increase velocity by acceleration
+    var xSign = sign(this.velX);
+    var ySign = sign(this.velY);
 
     if(this.dx == 0){
         this.velX -= (this.acc) * xSign;
@@ -87,7 +112,7 @@ Player.prototype.update = function(dt) {
         this.velY += this.acc * this.dy;
     }
 
-    //capping velocity at max
+    // cap velocity at max
     if (Math.abs(this.velY) >= this.maxVel) {
         this.velY = this.maxVel * this.dy;
     }
@@ -95,6 +120,7 @@ Player.prototype.update = function(dt) {
         this.velX = this.maxVel * this.dx;
     }
 
+    // change position
     this.x += parseInt(this.velX * dt);
     this.y += parseInt(this.velY * dt);
 
@@ -131,21 +157,13 @@ Player.prototype.addscore = function() {
 
 
 Player.prototype.handleInput = function(key) {
-    if (key == "left") {
-        this.dx = -1;
-    }
-    if (key == "up") {
-        this.dy = -1;
-    }
-    if (key == "down") {
-        this.dy = 1;
-    }
-    if (key == "right") {
-        this.dx = 1;
+    if ((key == "left") || (key == "right")) {
+        this.dx = directions[key];
+    } else if ((key == "up") || (key == "down")) {
+        this.dy = directions[key];
     }
 };
 Player.prototype.handleInputUp = function(key) {
-
     if ((key == "left") || (key == "right")) {
         this.dx = 0;
         this.velX = 0;
@@ -156,6 +174,20 @@ Player.prototype.handleInputUp = function(key) {
     }
 };
 
+/*
 Player.prototype.collideAction = function(){
     return;
 }
+=======
+        if (this.dx === directions[key]) {
+            this.dx = 0;
+            this.velX = 0;
+        }
+    } else if ((key == "up") || (key == "down")) {
+        if (this.dy === directions[key]) {
+            this.dy = 0;
+            this.velY = 0;
+        }
+    }
+};
+*/
